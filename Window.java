@@ -294,7 +294,7 @@ public class Window extends javax.swing.JFrame {
             String activityToChange = JOptionPane.showInputDialog("Enter the name of the activity to change: ");
             
             if (activityToChange.equals(null) || activityToChange.replace(" ", "").equals("")) {
-                JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+                JOptionPane.showMessageDialog(this, "Write a valid activity name.");
            }
             else
             {
@@ -302,7 +302,7 @@ public class Window extends javax.swing.JFrame {
             }
            
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+            JOptionPane.showMessageDialog(this, "Write a valid activity name.");
         }
         try{
     		newDuration = JOptionPane.showInputDialog("Enter a new duration for activity" + " " + activity);
@@ -316,12 +316,12 @@ public class Window extends javax.swing.JFrame {
     			  	//changes to only change duration of given node
     			  	nodes.get(i).setActivityDuration(nDuration);
     			  	repaint();
-    			  	JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
+    			  	JOptionPane.showMessageDialog(this, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
     		  }
     		}
             
     	}catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
+            JOptionPane.showMessageDialog(this, "Enter an integer for the duration.");
             
         }
     }
