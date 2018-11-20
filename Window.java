@@ -336,9 +336,9 @@ public class Window extends javax.swing.JFrame {
     private void jButtonHelpActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Start by creating an activity node."
-        		+"\nThe first node created is the head.\n"
-        		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
-        		+"To exit the program, press the End Application button.");
+                + "\nClicking one of the many butons will show some information on what it does."
+                + "\nWriting a report requires a valid graph."
+        		+ "\nTo exit the program, press the End Application button.");
     }
     
     
