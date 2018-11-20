@@ -442,6 +442,16 @@ public class Window extends javax.swing.JFrame {
             boolean invalidName = ( nameS.equals(null) || nameS.replace(" ", "").equals("") );
             boolean invalidDuration = true;
 
+            boolean nameExists = false;
+            
+            // Dont' want naming collisions
+            for( Node node : this.nodes ){
+                if( node.getActivityName().equals( nameS ) ){
+                    nameExists = true;
+                    break;
+                }
+            }
+
             // Get integer
             int foundDuration = 0;
             Scanner scanner = new Scanner(durationS);
@@ -451,7 +461,9 @@ public class Window extends javax.swing.JFrame {
                 invalidDuration = scanner.hasNext();
             }
 
-            if( invalidName ){
+            if( nameExists ){
+                err = "A node already has this name. Please choose different one.";
+            } else if( invalidName ){
                 err = "An invalid name has been entered";
             }
             else if( invalidDuration ){
