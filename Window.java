@@ -378,11 +378,13 @@ public class Window extends javax.swing.JFrame {
         p = processor = new Processor( this.nodes );
         p.buildPaths();
         
-        if( p.failed() )
-            JOptionPane.showMessageDialog( this, p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
+        if( p.failed() ){
+            JOptionPane.showMessageDialog( this, "Can't write report: " + p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
+            return;
+        }
 
         JFileChooser chooser = new JFileChooser(".");
-        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", ".txt") );
+        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", "txt") );
         int choice = chooser.showOpenDialog( this );
 
         if ( choice != JFileChooser.APPROVE_OPTION ){ return; }
@@ -401,13 +403,14 @@ public class Window extends javax.swing.JFrame {
             // really naive MIME check
             if( !file.getName().endsWith(".txt") ){
                 JOptionPane.showMessageDialog( this, "Incorrect file type.", 
-                    "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+                    "Extension not TXT", JOptionPane.ERROR_MESSAGE );
                 return;
             }
 
             String question = "Are you sure you would like to overwrite this file?";
             int response = JOptionPane.showConfirmDialog( this, question, "Confirm", 
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            
             if( response != JOptionPane.YES_OPTION ){ return; } 
         }
 
