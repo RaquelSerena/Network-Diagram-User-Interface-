@@ -294,7 +294,7 @@ public class Window extends javax.swing.JFrame {
             String activityToChange = JOptionPane.showInputDialog("Enter the name of the activity to change: ");
             
             if (activityToChange.equals(null) || activityToChange.replace(" ", "").equals("")) {
-                JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+                JOptionPane.showMessageDialog(this, "Write a valid activity name.");
            }
             else
             {
@@ -302,7 +302,7 @@ public class Window extends javax.swing.JFrame {
             }
            
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+            JOptionPane.showMessageDialog(this, "Write a valid activity name.");
         }
         try{
     		newDuration = JOptionPane.showInputDialog("Enter a new duration for activity" + " " + activity);
@@ -316,12 +316,12 @@ public class Window extends javax.swing.JFrame {
     			  	//changes to only change duration of given node
     			  	nodes.get(i).setActivityDuration(nDuration);
     			  	repaint();
-    			  	JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
+    			  	JOptionPane.showMessageDialog(this, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
     		  }
     		}
             
     	}catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
+            JOptionPane.showMessageDialog(this, "Enter an integer for the duration.");
             
         }
     }
@@ -336,9 +336,9 @@ public class Window extends javax.swing.JFrame {
     private void jButtonHelpActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Start by creating an activity node."
-        		+"\nThe first node created is the head.\n"
-        		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
-        		+"To exit the program, press the End Application button.");
+                + "\nClicking one of the many butons will show some information on what it does."
+                + "\nWriting a report requires a valid graph."
+        		+ "\nTo exit the program, press the End Application button.");
     }
     
     
@@ -378,11 +378,13 @@ public class Window extends javax.swing.JFrame {
         p = processor = new Processor( this.nodes );
         p.buildPaths();
         
-        if( p.failed() )
-            JOptionPane.showMessageDialog( this, p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
+        if( p.failed() ){
+            JOptionPane.showMessageDialog( this, "Can't write report: " + p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
+            return;
+        }
 
         JFileChooser chooser = new JFileChooser(".");
-        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", ".txt") );
+        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", "txt") );
         int choice = chooser.showOpenDialog( this );
 
         if ( choice != JFileChooser.APPROVE_OPTION ){ return; }
@@ -401,13 +403,14 @@ public class Window extends javax.swing.JFrame {
             // really naive MIME check
             if( !file.getName().endsWith(".txt") ){
                 JOptionPane.showMessageDialog( this, "Incorrect file type.", 
-                    "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+                    "Extension not TXT", JOptionPane.ERROR_MESSAGE );
                 return;
             }
 
             String question = "Are you sure you would like to overwrite this file?";
             int response = JOptionPane.showConfirmDialog( this, question, "Confirm", 
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            
             if( response != JOptionPane.YES_OPTION ){ return; } 
         }
 
@@ -442,6 +445,16 @@ public class Window extends javax.swing.JFrame {
             boolean invalidName = ( nameS.equals(null) || nameS.replace(" ", "").equals("") );
             boolean invalidDuration = true;
 
+            boolean nameExists = false;
+            
+            // Dont' want naming collisions
+            for( Node node : this.nodes ){
+                if( node.getActivityName().equals( nameS ) ){
+                    nameExists = true;
+                    break;
+                }
+            }
+
             // Get integer
             int foundDuration = 0;
             Scanner scanner = new Scanner(durationS);
@@ -451,7 +464,9 @@ public class Window extends javax.swing.JFrame {
                 invalidDuration = scanner.hasNext();
             }
 
-            if( invalidName ){
+            if( nameExists ){
+                err = "A node already has this name. Please choose different one.";
+            } else if( invalidName ){
                 err = "An invalid name has been entered";
             }
             else if( invalidDuration ){
