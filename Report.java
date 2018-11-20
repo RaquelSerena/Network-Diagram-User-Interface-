@@ -41,14 +41,11 @@ public class Report{
             // Get title of file
 
             // Header 
-            sb.append( "Title: ")
-            	.append("\t")
+            sb.append( "Title:\t")
                 .append( file.getName().replace(".txt", "") )
                 .append( SEP )
-                .append("\n")
-                .append( "Date: " )
+                .append( "Date:\t" )
                 .append( LocalDateTime.now() )
-                .append("\n")
                 .append( SEP ).append( SEP );
             
             // Display activities in alphabetical order 
@@ -76,7 +73,6 @@ public class Report{
                 }
             }
             
-
             writer.append( sb );
 
             return true;
@@ -93,7 +89,11 @@ public class Report{
 
     static final private Comparator sorter = new Comparator<Node>() {
         public int compare( Node L, Node R ) {
-            return L.getActivityName().compareTo( R.getActivityName() );
+            
+            String lName = L.getActivityName().toLowerCase();
+            String rName = R.getActivityName().toLowerCase();
+            
+            return lName.compareTo( rName );
         }
     };
 }
